@@ -8,8 +8,6 @@
       .then(blob => blob.json())
       .then(data => cities.push(...data));
 
-  console.log(cities);
-
   function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
@@ -23,6 +21,17 @@
 
   function displayMatches() {
     const results = findMatches(this.value, cities);
+    const html = results.map(place => {
+      const regex = new RegExp(this.value, 'gi');
+      const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+      const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+      return `
+        <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${formatNumber(place.population)}</span>
+        </li>
+      `;
+    }).join('');
     suggestions.innerHTML = html;
 
   }
