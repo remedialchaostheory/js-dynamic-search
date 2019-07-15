@@ -21,17 +21,29 @@
 
   function displayMatches() {
     const results = findMatches(this.value, cities);
+
     const html = results.map(place => {
       const regex = new RegExp(this.value, 'gi');
+
+      // Highlights the search terms
       const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
       const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+
+      // Change background to corresponding city when it's the only result
+      if (results.length === 1) {
+        document.documentElement.style.setProperty('background', `url(https://source.unsplash.com/1600x900/?${place.city}`);
+      }
+
       return `
         <li>
             <span class="name">${cityName}, ${stateName}</span>
             <span class="population">${formatNumber(place.population)}</span>
         </li>
       `;
+
     }).join('');
+
+
     suggestions.innerHTML = html;
 
   }
